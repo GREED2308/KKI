@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASV Dashboard</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #0f172a;
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+    }
+
+    .button-group button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+
+    .start {
+      background-color: #16a34a;
+      color: white;
+    }
+
+    .home {
+      background-color: #eab308;
+      color: black;
+    }
+
+    .stop {
+      background-color: #dc2626;
+      color: white;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    .card p {
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+
+    .card h2 {
+      font-size: 28px;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    .map {
+      height: 400px;
+      background-color: #334155;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #cbd5e1;
+      margin-top: 15px;
+    }
+
+    .camera {
+      height: 220px;
+      background-color: #334155;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #cbd5e1;
+      margin-top: 15px;
+    }
+
+    .logs {
+      margin-top: 20px;
+    }
+
+    .log-item {
+      background-color: #334155;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .waypoints {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .waypoint {
+      background-color: #334155;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <div>
+        <h1>ASV Dashboard</h1>
+        <p>Kontes Kapal Indonesia - Autonomous Surface Vehicle</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <p>Speed</p>
+        <h2>3.2 knots</h2>
+      </div>
+
+      <div class="card">
+        <p>Battery</p>
+        <h2>87%</h2>
+      </div>
+
+      <div class="card">
+        <p>Heading</p>
+        <h2>45° NE</h2>
+      </div>
+
+      <div class="card">
+        <p>Signal</p>
+        <h2>Strong</h2>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <div class="panel">
+        <h2>Live Map</h2>
+
+        <div class="map">
+          Tempat Map Kapal
+        </div>
+
+        <div class="waypoints">
+          <div class="waypoint">
+            <h3>Waypoint A</h3>
+            <p>-7.2575, 112.7521</p>
+          </div>
+
+          <div class="waypoint">
+            <h3>Waypoint B</h3>
+            <p>-7.2580, 112.7530</p>
+          </div>
+
+          <div class="waypoint">
+            <h3>Waypoint C</h3>
+            <p>-7.2590, 112.7540</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <h2>Camera Feed</h2>
+
+          <div class="camera">
+            Live Camera
+          </div>
+        </div>
+
+        <div class="panel logs">
+          <h2>System Logs</h2>
+
+          <div class="log-item">
+            Autonomous mode activated
+          </div>
+
+          <div class="log-item">
+            Waypoint A reached
+          </div>
+
+          <div class="log-item">
+            Obstacle detected and avoided
+          </div>
+
+          <div class="log-item">
+            GPS connected successfully
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
