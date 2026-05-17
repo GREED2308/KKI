@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASV Dashboard</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:#f1f1f1;
+      padding:20px;
+    }
+
+    .dashboard{
+      width:1100px;
+      margin:auto;
+      background:#0f3b70;
+      border-radius:15px;
+      padding:15px;
+      color:white;
+    }
+
+    /* HEADER */
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:15px;
+    }
+
+    .logo-group{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .logo{
+      width:40px;
+      height:40px;
+      background:white;
+      border-radius:50%;
+    }
+
+    .lintasan{
+      background:#11c5df;
+      padding:10px 50px;
+      border-radius:30px;
+      font-weight:bold;
+      font-size:24px;
+    }
+
+    .battery{
+      width:90px;
+      height:25px;
+      border:2px solid #00e5ff;
+      border-radius:20px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .battery-fill{
+      width:75%;
+      height:100%;
+      background:#00e5ff;
+    }
+
+    /* INFO BAR */
+
+    .info-bar{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:15px;
+      font-weight:bold;
+    }
+
+    /* MAIN GRID */
+
+    .main{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr 1.3fr;
+      gap:15px;
+    }
+
+    .panel{
+      background:#11457f;
+      border-radius:20px;
+      padding:15px;
+    }
+
+    .panel-title{
+      text-align:center;
+      margin-bottom:10px;
+      font-weight:bold;
+    }
+
+    /* LOG MISSION */
+
+    .mission-list{
+      list-style:none;
+      line-height:2;
+      font-size:14px;
+    }
+
+    .mission-list li{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    /* MAP */
+
+    .map{
+      height:220px;
+      border-radius:10px;
+      background:
+      linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px),
+      #13b7d7;
+
+      background-size:30px 30px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .trajectory{
+      position:absolute;
+      width:160px;
+      height:2px;
+      background:white;
+      top:60px;
+      left:30px;
+      transform:rotate(15deg);
+    }
+
+    .trajectory2{
+      position:absolute;
+      width:120px;
+      height:2px;
+      background:white;
+      top:140px;
+      left:90px;
+      transform:rotate(-20deg);
+    }
+
+    .ship{
+      width:15px;
+      height:15px;
+      background:red;
+      border-radius:50%;
+      position:absolute;
+      bottom:20px;
+      right:30px;
+    }
+
+    .map-info{
+      display:flex;
+      justify-content:space-between;
+      margin-top:10px;
+      font-weight:bold;
+      color:#ffd500;
+    }
+
+    /* VIDEO */
+
+    .video{
+      height:170px;
+      border-radius:10px;
+      background:linear-gradient(to top,#88aa00 30%, #ccefff 30%);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .video::before{
+      content:'';
+      width:80px;
+      height:30px;
+      background:white;
+      border-radius:30px;
+      position:absolute;
+      top:30px;
+      left:30px;
+    }
+
+    .video::after{
+      content:'';
+      width:100px;
+      height:35px;
+      background:white;
+      border-radius:30px;
+      position:absolute;
+      top:60px;
+      right:30px;
+    }
+
+    .small-video{
+      height:70px;
+      margin-top:10px;
+      border-radius:10px;
+      background:linear-gradient(to top,#88aa00 30%, #ccefff 30%);
+    }
+
+    /* ATTITUDE */
+
+    .attitude{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background:#16d7ff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:28px;
+      font-weight:bold;
+      margin:auto;
+      margin-top:10px;
+    }
+
+    /* BOTTOM */
+
+    .bottom{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+      margin-top:15px;
+    }
+
+    .datetime{
+      background:#11457f;
+      border-radius:20px;
+      padding:20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .date{
+      font-size:45px;
+      font-weight:bold;
+      color:#ffd500;
+    }
+
+    .time{
+      font-size:28px;
+    }
+
+    .coord{
+      text-align:center;
+      font-size:24px;
+      font-weight:bold;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <!-- TOPBAR -->
+
+  <div class="topbar">
+
+    <div class="logo-group">
+      <div class="logo"></div>
+      <div class="logo"></div>
+      <div class="logo"></div>
+    </div>
+
+    <div class="lintasan">
+      Lintasan : A
+    </div>
+
+    <div class="logo-group">
+      <div class="logo"></div>
+      <div class="logo"></div>
+      <div class="logo"></div>
+    </div>
+
+  </div>
+
+  <!-- INFO -->
+
+  <div class="info-bar">
+    <div>Tim: Trunojoyo Robotics I</div>
+
+    <div class="battery">
+      <div class="battery-fill"></div>
+    </div>
+
+    <div>PT: Universitas Trunojoyo</div>
+  </div>
+
+  <!-- MAIN -->
+
+  <div class="main">
+
+    <!-- LEFT -->
+
+    <div class="panel">
+
+      <div class="panel-title">
+        Log Mission
+      </div>
+
+      <ul class="mission-list">
+        <li><input type="checkbox"> Preparation</li>
+        <li><input type="checkbox" checked> Start</li>
+        <li><input type="checkbox"> Floating Ball Set</li>
+        <li><input type="checkbox"> Mission Surface Imaging</li>
+        <li><input type="checkbox"> Mission Underwater Imaging</li>
+        <li><input type="checkbox"> Finish</li>
+      </ul>
+
+    </div>
+
+    <!-- CENTER -->
+
+    <div class="panel">
+
+      <div class="panel-title">
+        Position & Trajectory Mapping
+      </div>
+
+      <div class="map">
+        <div class="trajectory"></div>
+        <div class="trajectory2"></div>
+        <div class="ship"></div>
+      </div>
+
+      <div class="map-info">
+        <div>SOG</div>
+        <div>COG</div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top:5px;">
+        <div>
+          0,0 knots<br>
+          0,0 km/h
+        </div>
+
+        <div>
+          0,0 deg
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="panel">
+
+      <div class="panel-title">
+        Live View Video
+      </div>
+
+      <div class="video"></div>
+
+      <div style="display:grid; grid-template-columns:1fr 100px; gap:10px; margin-top:10px;">
+
+        <div>
+          <div style="text-align:center; margin-bottom:10px;">
+            Attitude
+          </div>
+
+          <div class="attitude">
+            0°
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:13px; margin-bottom:5px;">
+            Underwater Imaging
+          </div>
+
+          <div class="small-video"></div>
+
+          <div style="font-size:13px; margin-top:10px; margin-bottom:5px;">
+            Surface Imaging
+          </div>
+
+          <div class="small-video"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM -->
+
+  <div class="bottom">
+
+    <div class="datetime">
+
+      <div>
+        <div class="date">
+          WED
+        </div>
+
+        <div class="time">
+          14:35:42
+        </div>
+      </div>
+
+      <div style="font-size:50px; font-weight:bold;">
+        00/00/0000
+      </div>
+
+    </div>
+
+    <div class="datetime">
+
+      <div class="coord">
+        Coordinates<br>
+        S 3.56734 E 104.67235
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
