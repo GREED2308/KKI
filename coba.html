@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASV Modern Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tim: Trunojoyo Robotics I</title>
 
   <style>
+    /* =========================
+       RESET
+    ========================== */
     * {
       margin: 0;
       padding: 0;
@@ -13,6 +17,9 @@
       font-family: Arial, sans-serif;
     }
 
+    /* =========================
+       BODY
+    ========================== */
     body {
       background: #07111f;
       color: white;
@@ -24,143 +31,127 @@
       margin: auto;
     }
 
+    /* =========================
+       HEADER
+    ========================== */
     .header {
-      background: #0d1b2a;
-      border: 1px solid rgba(0,255,255,0.2);
-      border-radius: 20px;
-      padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 15px;
+
       margin-bottom: 20px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.08);
-    }
-
-    .header h1 {
-      font-size: 32px;
-      color: #4deeea;
-    }
-
-    .header p {
-      color: #9fb3c8;
-      margin-top: 5px;
-    }
-
-    .mission-status {
-      background: linear-gradient(135deg, #00b4d8, #0077b6);
-      padding: 12px 25px;
-      border-radius: 15px;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .grid-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .panel {
-      background: #0d1b2a;
-      border-radius: 20px;
       padding: 20px;
-      border: 1px solid rgba(255,255,255,0.05);
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+
+      background: #0d1b2a;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 20px;
+
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.08);
     }
 
-    .panel h2 {
-      margin-bottom: 15px;
+    .header-left h1 {
+      font-size: 30px;
+      color: #4deeea;
+      margin-bottom: 5px;
+    }
+
+    .header-left p {
+      color: #9fb3c8;
+      font-size: 14px;
+    }
+
+    .header-info {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .info-box {
+      padding: 10px 16px;
+
+      background: #13263b;
+      border: 1px solid rgba(0, 255, 255, 0.1);
+      border-radius: 12px;
+
+      color: #cfe8ff;
+      font-size: 14px;
+    }
+
+    .info-box strong {
       color: #4deeea;
     }
 
-    .map {
-      height: 420px;
-      border-radius: 15px;
-      background:
-        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
-        #12304d;
-      background-size: 40px 40px;
-      position: relative;
-      overflow: hidden;
+    /* =========================
+       LABEL LINTASAN
+    ========================== */
+    .track-label {
+      padding: 12px 24px;
+
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border-radius: 999px;
+
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      letter-spacing: 1px;
+
+      box-shadow: 0 0 15px rgba(0, 198, 255, 0.4);
     }
 
-    .ship {
-      width: 18px;
-      height: 18px;
-      background: #00f5ff;
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      box-shadow: 0 0 15px #00f5ff;
-    }
-
-    .trajectory {
-      position: absolute;
-      width: 250px;
-      height: 2px;
-      background: yellow;
-      transform: rotate(20deg);
-      top: 45%;
-      left: 20%;
-    }
-
-    .camera {
-      height: 250px;
-      border-radius: 15px;
-      background: linear-gradient(to top, #4d7c0f 20%, #dbeafe 20%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .camera::before,
-    .camera::after {
-      content: '';
-      position: absolute;
-      background: rgba(255,255,255,0.8);
-      border-radius: 50px;
-    }
-
-    .camera::before {
-      width: 100px;
-      height: 40px;
-      top: 40px;
-      left: 40px;
-    }
-
-    .camera::after {
-      width: 140px;
-      height: 50px;
-      top: 70px;
-      right: 30px;
-    }
-
+    /* =========================
+       TELEMETRY
+    ========================== */
     .telemetry {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 15px;
+
       margin-bottom: 20px;
     }
 
     .card {
-      background: #0d1b2a;
-      border-radius: 18px;
       padding: 20px;
-      border: 1px solid rgba(0,255,255,0.1);
+
+      background: #0d1b2a;
+      border: 1px solid rgba(0, 255, 255, 0.1);
+      border-radius: 18px;
+
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(0, 255, 255, 0.3);
     }
 
     .card p {
-      color: #9fb3c8;
       margin-bottom: 10px;
+      color: #9fb3c8;
+      font-size: 14px;
     }
 
     .card h3 {
-      font-size: 30px;
+      font-size: 28px;
       color: #4deeea;
+    }
+    
+    .card span {
+      font-size: 14px;
+      color: #9fb3c8;
+      margin-left: 5px;
+    }
+
+    /* =========================
+       GRID LAYOUT
+    ========================== */
+    .grid-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+
+      margin-bottom: 20px;
     }
 
     .bottom-grid {
@@ -169,162 +160,375 @@
       gap: 20px;
     }
 
-    .waypoint {
-      background: #13263b;
+    /* =========================
+       PANEL
+    ========================== */
+    .panel {
+      padding: 20px;
+
+      background: #0d1b2a;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .panel h2 {
+      margin-bottom: 15px;
+      color: #4deeea;
+      font-size: 22px;
+    }
+
+    /* =========================
+       MAP
+    ========================== */
+    .map {
+      position: relative;
+      overflow: hidden;
+
+      height: 420px;
+      border-radius: 15px;
+
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        #12304d;
+
+      background-size: 40px 40px;
+    }
+
+    .trajectory {
+      position: absolute;
+      top: 45%;
+      left: 20%;
+
+      width: 250px;
+      height: 2px;
+
+      background: yellow;
+      transform: rotate(20deg);
+    }
+
+    .ship {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      width: 18px;
+      height: 18px;
+
+      background: #00f5ff;
+      border-radius: 50%;
+
+      box-shadow: 0 0 15px #00f5ff;
+    }
+
+    /* Geo-Tag Box Style */
+    .geotag-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .coordinates {
       padding: 15px;
+      background: #13263b;
       border-radius: 12px;
-      margin-bottom: 10px;
-      border-left: 5px solid #00d4ff;
+    }
+
+    .coordinates p {
+      color: #cfe8ff;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    /* =========================
+       CAMERA
+    ========================== */
+    .camera-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .camera {
+      position: relative;
+      overflow: hidden;
+
+      height: 220px;
+      border-radius: 15px;
+
+      background:
+        linear-gradient(to top, #4d7c0f 20%, #dbeafe 20%);
+    }
+
+    .camera::before,
+    .camera::after {
+      content: "";
+      position: absolute;
+
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50px;
+    }
+
+    .camera::before {
+      top: 40px;
+      left: 40px;
+
+      width: 100px;
+      height: 40px;
+    }
+
+    .camera::after {
+      top: 70px;
+      right: 30px;
+
+      width: 140px;
+      height: 50px;
+    }
+
+    /* =========================
+       LOGS & POSITION TASKS
+    ========================== */
+    .logs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .log {
+      padding: 14px 16px;
+
       background: #13263b;
-      padding: 12px;
+      border-left: 4px solid #00f5ff;
       border-radius: 10px;
-      margin-bottom: 10px;
+
+      color: #cfe8ff;
+      font-size: 14px;
     }
 
-    .buttons {
+    /* Mission Checklist & Score Dashboard */
+    .mission-header-status {
       display: flex;
-      gap: 10px;
-      margin-top: 15px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
     }
 
-    button {
-      border: none;
-      padding: 12px 18px;
-      border-radius: 12px;
-      color: white;
+    .score-badge {
+      padding: 8px 16px;
+      background: #1e3a8a;
+      border: 1px solid #3b82f6;
+      border-radius: 8px;
+      color: #60a5fa;
       font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
+      font-size: 18px;
     }
 
-    .start {
-      background: #16a34a;
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .home {
-      background: #f59e0b;
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #111e2f;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 14px;
     }
 
-    .stop {
-      background: #dc2626;
+    .task-item.completed {
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.05);
     }
 
-    button:hover {
-      transform: scale(1.05);
+    .task-item input[type="checkbox"] {
+      accent-color: #22c55e;
+      width: 16px;
+      height: 16px;
     }
 
-    @media(max-width: 900px) {
-      .grid-top,
-      .bottom-grid {
+    /* =========================
+       RESPONSIVE
+    ========================== */
+    @media (max-width: 1024px) {
+      .grid-top, .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .header-info {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .info-box {
+        width: auto;
+      }
+
+      .geotag-container {
         grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
+
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <div class="header">
-    <div>
-      <h1>ASV CONTROL CENTER</h1>
-      <p>Kontes Kapal Indonesia - Autonomous Surface Vehicle</p>
-    </div>
+    <header class="header">
+      <div class="header-left">
+        <h1><strong>Tim:</strong> Trunojoyo Robotics I</h1>
+      </div>
 
-    <div class="mission-status">
-      MISSION ACTIVE
-    </div>
+      <div class="track-label">
+        LINTASAN B
+      </div>
+
+      <div class="header-info">
+        <div class="info-box">
+          <strong>PT:</strong> Universitas Trunojoyo
+        </div>
+      </div>
+    </header>
+
+    <section class="telemetry">
+      <div class="card">
+        <p>Speed (SOG)</p>
+        <h3>3.2 <span>kn</span> / 5.9 <span>km/h</span></h3>
+      </div>
+
+      <div class="card">
+        <p>Course Over Ground (COG)</p>
+        <h3>124.5° <span>deg</span></h3>
+      </div>
+
+      <div class="card">
+        <p>Battery</p>
+        <h3>87%</h3>
+      </div>
+
+      <div class="card">
+        <p>Signal</p>
+        <h3>Strong</h3>
+      </div>
+    </section>
+
+    <section class="grid-top">
+
+      <div class="panel">
+        <h2>Trajectory Mapping</h2>
+
+        <div class="map">
+          <div class="trajectory"></div>
+          <div class="ship"></div>
+        </div>
+
+        <div class="geotag-container">
+          <div class="coordinates">
+            <p><strong>Coordinates (Format A):</strong></p>
+            <p style="color: #4deeea; font-family: monospace;">S 7.2575 | E 112.7521</p>
+          </div>
+          <div class="coordinates">
+            <p><strong>Geo-tag Time Log:</strong></p>
+            <p style="color: #cfe8ff;">Mon, 25/05/2026</p>
+            <p style="color: #9fb3c8; font-size: 12px; font-family: monospace;">13:10:16 [hh:mm:ss]</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="camera-wrapper">
+          <div class="camera-box">
+            <h2>Front Camera Feed</h2>
+            <div class="camera"></div>
+          </div>
+
+          <div class="camera-box">
+            <h2>Rear Camera Feed</h2>
+            <div class="camera"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="bottom-grid">
+
+      <div class="panel">
+        <div class="mission-header-status">
+          <h2>Position-log (Misi & Skor)</h2>
+          <div class="score-badge">Total Skor: 4 / 7</div>
+        </div>
+
+        <div class="task-list">
+          <div class="task-item completed">
+            <input type="checkbox" checked disabled>
+            <span>1. Preparation (Monitoring & Comm Setting)</span>
+          </div>
+          <div class="task-item completed">
+            <input type="checkbox" checked disabled>
+            <span>2. Start</span>
+          </div>
+          <div class="task-item completed">
+            <input type="checkbox" checked disabled>
+            <span>3. Floating ball set 1-10</span>
+          </div>
+          <div class="task-item completed">
+            <input type="checkbox" checked disabled>
+            <span>4. Mission Surface Imaging</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" disabled>
+            <span style="color: #64748b;">5. Mission Underwater Imaging</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" disabled>
+            <span style="color: #64748b;">6. Docking</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" disabled>
+            <span style="color: #64748b;">7. Finish</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>System Logs</h2>
+
+        <div class="logs-container">
+          <div class="log">
+            [13:08:12] Waypoint 1 completed successfully
+          </div>
+          <div class="log" style="border-left-color: #f59e0b;">
+            [13:08:45] Obstacle detected and avoided
+          </div>
+          <div class="log">
+            [13:09:02] Heading stabilization active
+          </div>
+          <div class="log">
+            [13:09:55] Autonomous navigation running
+          </div>
+        </div>
+      </div>
+
+    </section>
+
   </div>
-
-  <div class="telemetry">
-    <div class="card">
-      <p>Speed</p>
-      <h3>3.2 kn</h3>
-    </div>
-
-    <div class="card">
-      <p>Battery</p>
-      <h3>87%</h3>
-    </div>
-
-    <div class="card">
-      <p>Heading</p>
-      <h3>127° SE</h3>
-    </div>
-
-    <div class="card">
-      <p>Signal</p>
-      <h3>Strong</h3>
-    </div>
-  </div>
-
-  <div class="grid-top">
-
-    <div class="panel">
-      <h2>Trajectory Mapping</h2>
-
-      <div class="map">
-        <div class="trajectory"></div>
-        <div class="ship"></div>
-      </div>
-
-      <div class="buttons">
-        <button class="start">Start Mission</button>
-        <button class="home">Return Home</button>
-        <button class="stop">Emergency Stop</button>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>Live Camera Feed</h2>
-
-      <div class="camera"></div>
-
-      <div style="margin-top:15px;">
-        <p><strong>Coordinates:</strong></p>
-        <p>S 7.2575 | E 112.7521</p>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="bottom-grid">
-
-    <div class="panel">
-      <h2>Waypoint Planner</h2>
-
-      <div class="waypoint">
-        <strong>Waypoint A</strong><br>
-        -7.2575, 112.7521
-      </div>
-
-      <div class="waypoint">
-        <strong>Waypoint B</strong><br>
-        -7.2580, 112.7530
-      </div>
-
-      <div class="waypoint">
-        <strong>Waypoint C</strong><br>
-        -7.2590, 112.7540
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>System Logs</h2>
-
-      <div class="log">✔ GPS Connected</div>
-      <div class="log">✔ Autonomous Mode Activated</div>
-      <div class="log">✔ Obstacle Avoided Successfully</div>
-      <div class="log">✔ Heading Stabilized</div>
-    </div>
-
-  </div>
-
-</div>
 
 </body>
 </html>
