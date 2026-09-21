@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasbor ASV KKI 2026</title>
+
+    <style>
+        :root {
+            --bg-dark: #0a111a;
+            --panel-bg: #111c2b;
+            --panel-bg-2: #0c1622;
+            --border-color: #1c2e45;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --cyan-accent: #00e5ff;
+            --green: #22c55e;
+            --yellow: #facc15;
+            --red: #ef4444;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 20px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--cyan-accent);
+            margin: 0;
+            text-align: center;
+        }
+
+        .header-text {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .card-value {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--cyan-accent);
+        }
+
+        .card-value.status-online {
+            color: var(--green);
+        }
+
+        .card-value.status-warning {
+            color: var(--yellow);
+        }
+
+        .card-value.status-offline {
+            color: var(--red);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2.2fr) minmax(360px, 1fr);
+            gap: 14px;
+        }
+
+        .section-title {
+            color: var(--cyan-accent);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* =========================================================
+           MAP
+           ========================================================= */
+
+        .trajectory-card {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .trajectory-map {
+            flex: 1;
+            min-height: 300px;
+            background-color: #0c1520;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            position: relative;
+
+            background-image:
+                linear-gradient(
+                    rgba(28, 46, 69, 0.5) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(28, 46, 69, 0.5) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+            overflow: hidden;
+        }
+
+        .trajectory-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .boat-marker {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background-color: var(--cyan-accent);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--cyan-accent);
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .coordinates {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            background-color: rgba(10, 17, 26, 0.9);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .gps-invalid {
+            color: var(--yellow);
+        }
+
+        /* =========================================================
+           CAMERA
+           ========================================================= */
+
+        .camera-card {
+            margin-bottom: 20px;
+        }
+
+        .camera-feed {
+            background-color: #000;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            height: auto;
+            min-height: 0;
+            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            display: block;
+
+            /* Feed kamera hanya untuk ditampilkan */
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* =========================================================
+           TELEMETRY PANEL
+           ========================================================= */
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-item {
+            background-color: var(--panel-bg-2);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .telemetry-label {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .telemetry-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        /* =========================================================
+           LOGS
+           ========================================================= */
+
+        .log-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .log-item {
+            background-color: var(--panel-bg-2);
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trajectory-map {
+                height: 360px;
+            }
+
+        }
+
+        @media (max-width: 768px) {
+
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                gap: 14px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 8px;
+            }
+
+            .header-title {
+                font-size: 24px;
+            }
+
+            .header-text {
+                font-size: 13px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .card {
+                padding: 12px;
+            }
+
+            .card-value {
+                font-size: 21px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .trajectory-map {
+                height: 300px;
+            }
+
+            .telemetry-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 520px) {
+
+            body {
+                padding: 8px;
+            }
+
+            .container {
+                gap: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-value {
+                font-size: 24px;
+            }
+
+            .telemetry-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trajectory-map {
+                height: 240px;
+            }
+
+            .coordinates {
+                font-size: 11px;
+                padding: 6px 8px;
+            }
+
+            .camera-feed {
+                aspect-ratio: 4 / 3;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
+    <div class="header">
+        <div class="header-text">
+            Tim: Trunojoyo Robotics I
+        </div>
+
+        <h1 class="header-title">
+            Lintasan : B
+        </h1>
+
+        <div class="header-text" style="color: var(--text-muted);">
+            PT: Universitas Trunojoyo
+        </div>
+    </div>
+
+
+    <!-- =========================================================
+         STATUS CARDS
+         ========================================================= -->
+
+    <div class="stats-grid">
+
+        <div class="card">
+            <div class="card-title">
+                Yaw
+            </div>
+
+            <div
+                class="card-value"
+                id="yawValue">
+                0.0°
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-title">
+                GPS
+            </div>
+
+            <div
+                class="card-value"
+                id="gpsValue">
+                Mencari...
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-title">
+                Sinyal
+            </div>
+
+            <div
+                class="card-value status-offline"
+                id="telemetryStatus">
+                OFFLINE
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         MAIN CONTENT
+         ========================================================= -->
+
+    <div class="main-grid">
+
+        <!-- =========================
+             TRAJECTORY
+             ========================= -->
+
+        <div class="card trajectory-card">
+
+            <div class="section-title">
+                Trajectory Mapping
+            </div>
+
+            <div class="trajectory-map">
+
+                <svg
+                    id="trajectorySvg"
+                    class="trajectory-svg"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none">
+
+                    <polyline
+                        id="trajectoryLine"
+                        points=""
+                        fill="none"
+                        stroke="var(--cyan-accent)"
+                        stroke-width="0.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        vector-effect="non-scaling-stroke">
+                    </polyline>
+
+                </svg>
+
+                <div
+                    id="boatMarker"
+                    class="boat-marker"
+                    style="display:none;">
+                </div>
+
+                <div
+                    id="mapStatus"
+                    style="
+                        position:absolute;
+                        font-size:12px;
+                        color:var(--text-muted);
+                        transform:translate(-50%, 12px);
+                        white-space:nowrap;
+                        z-index:11;
+                    ">
+                    Menunggu GPS
+                </div>
+
+                <div class="coordinates">
+
+                    Coordinates:
+                    <br>
+
+                    <span id="coordinatesValue">
+                        GPS belum tersedia
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CAMERAS
+             ========================= -->
+
+        <div>
+
+            <div class="card camera-card">
+
+                <div class="section-title">
+                    Front Camera Feed
+                </div>
+
+                <iframe
+                    src="http://72.60.78.104:8889/front/"
+                    class="camera-feed"
+                    allow="autoplay; fullscreen"
+                    title="Front Camera">
+                </iframe>
+
+            </div>
+
+
+            <div class="card camera-card">
+
+                <div class="section-title">
+                    Underwater Camera Feed
+                </div>
+
+                <iframe
+                    src="http://72.60.78.104:8889/underwater/"
+                    class="camera-feed"
+                    allow="autoplay; fullscreen"
+                    title="Underwater Camera">
+                </iframe>
+
+            </div>
+
+            <div class="card">
+
+                <div class="section-title">
+                    Captured Images
+                </div>
+
+                <div style="
+                    display:flex;
+                    gap:12px;
+                    flex-wrap:wrap;
+                ">
+
+                    <a
+                        href="/captures/front"
+                        target="_blank"
+                        style="
+                            display:inline-block;
+                            padding:12px 18px;
+                            background:var(--panel-bg-2);
+                            border:1px solid var(--border-color);
+                            border-radius:6px;
+                            color:var(--cyan-accent);
+                            text-decoration:none;
+                            font-weight:bold;
+                        ">
+                        Front Camera Capture
+                    </a>
+
+                    <a
+                        href="/captures/underwater"
+                        target="_blank"
+                        style="
+                            display:inline-block;
+                            padding:12px 18px;
+                            background:var(--panel-bg-2);
+                            border:1px solid var(--border-color);
+                            border-radius:6px;
+                            color:var(--cyan-accent);
+                            text-decoration:none;
+                            font-weight:bold;
+                        ">
+                        Underwater Camera Capture
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         TELEMETRY DETAIL
+         ========================================================= -->
+
+    <div class="card">
+
+        <div class="section-title">
+            Live Telemetry
+        </div>
+
+        <div class="telemetry-grid">
+
+            <div class="telemetry-item">
+
+                <div class="telemetry-label">
+                    IMU Yaw
+                </div>
+
+                <div
+                    class="telemetry-value"
+                    id="detailYaw">
+                    0.0°
+                </div>
+
+            </div>
+
+
+            <div class="telemetry-item">
+
+                <div class="telemetry-label">
+                    Calibration
+                </div>
+
+                <div
+                    class="telemetry-value"
+                    id="calibrationValue">
+                    0 / 3
+                </div>
+
+            </div>
+
+
+            <div class="telemetry-item">
+
+                <div class="telemetry-label">
+                    Satellites
+                </div>
+
+                <div
+                    class="telemetry-value"
+                    id="satellitesValue">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="telemetry-item">
+
+                <div class="telemetry-label">
+                    Last Update
+                </div>
+
+                <div
+                    class="telemetry-value"
+                    id="ageValue">
+                    --
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         SYSTEM LOGS
+         ========================================================= -->
+
+    <div class="card">
+
+        <div class="section-title">
+            System Logs
+        </div>
+
+        <div class="log-list">
+
+            <div
+                class="log-item"
+                id="gpsLog">
+                ⏳ GPS sedang mencari satelit...
+            </div>
+
+            <div
+                class="log-item"
+                id="arduinoLog">
+                ⏳ Menunggu telemetry Arduino...
+            </div>
+
+            <div
+                class="log-item">
+                ✔ Front camera stream aktif
+            </div>
+
+            <div
+                class="log-item">
+                ✔ Underwater camera stream aktif
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     TELEMETRY JAVASCRIPT
+     ============================================================= -->
+
+<script>
+
+    const TELEMETRY_API = "/api/telemetry";
+
+    function setTelemetryStatus(age) {
+
+        const status = document.getElementById("telemetryStatus");
+
+        status.classList.remove(
+            "status-online",
+            "status-warning",
+            "status-offline"
+        );
+
+        if (age === null) {
+
+            status.textContent = "OFFLINE";
+            status.classList.add("status-offline");
+
+            return;
+        }
+
+        if (age < 1.0) {
+
+            status.textContent = "ONLINE";
+            status.classList.add("status-online");
+
+        } else if (age < 3.0) {
+
+            status.textContent = "DELAYED";
+            status.classList.add("status-warning");
+
+        } else {
+
+            status.textContent = "OFFLINE";
+            status.classList.add("status-offline");
+
+        }
+
+    }
+
+    let originLat = null;
+    let originLon = null;
+
+    let lastMarkerX = 50;
+    let lastMarkerY = 50;
+
+    let trajectoryPoints = [];
+
+    /*
+    * Batas jitter GPS.
+    * Perubahan di bawah nilai ini akan dianggap
+    * sebagai GPS drift dan marker tidak dipindahkan.
+    */
+    const GPS_JITTER_METERS = 2.0;
+
+    /*
+    * Skala tampilan map.
+    * 1 meter perpindahan kapal = beberapa persen map.
+    */
+    const MAP_METERS = 30.0;
+
+
+    function distanceMeters(lat1, lon1, lat2, lon2) {
+
+        const R = 6371000;
+
+        const dLat =
+            (lat2 - lat1) *
+            Math.PI / 180;
+
+        const dLon =
+            (lon2 - lon1) *
+            Math.PI / 180;
+
+        const a =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * Math.PI / 180) *
+            Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) ** 2;
+
+        const c =
+            2 *
+            Math.atan2(
+                Math.sqrt(a),
+                Math.sqrt(1 - a)
+            );
+
+        return R * c;
+    }
+
+    function addTrajectoryPoint(x, y) {
+
+        const trajectoryLine =
+            document.getElementById("trajectoryLine");
+
+        /*
+        * Simpan titik baru
+        */
+        trajectoryPoints.push({
+            x: x,
+            y: y
+        });
+
+        /*
+        * Batasi jumlah titik supaya
+        * dashboard tidak terlalu berat.
+        */
+        if (trajectoryPoints.length > 1000) {
+            trajectoryPoints.shift();
+        }
+
+        /*
+        * Ubah daftar titik menjadi format SVG:
+        * "x,y x,y x,y ..."
+        */
+        trajectoryLine.setAttribute(
+            "points",
+            trajectoryPoints
+                .map(point => `${point.x},${point.y}`)
+                .join(" ")
+        );
+    }
+
+    function updateBoatPosition(lat, lon) {
+
+        const boat =
+            document.getElementById("boatMarker");
+
+        const status =
+            document.getElementById("mapStatus");
+
+
+        /*
+        * GPS tidak valid
+        */
+
+        if (
+            lat === -999 ||
+            lon === -999 ||
+            !Number.isFinite(lat) ||
+            !Number.isFinite(lon)
+        ) {
+
+            boat.style.display = "none";
+            status.style.display = "none";
+
+            return;
+        }
+
+
+        /*
+        * GPS pertama menjadi titik awal.
+        */
+
+        if (
+            originLat === null ||
+            originLon === null
+        ) {
+
+            originLat = lat;
+            originLon = lon;
+
+            console.log(
+                "GPS origin:",
+                originLat,
+                originLon
+            );
+
+            boat.style.left = "50%";
+            boat.style.top = "50%";
+
+            status.style.left = "50%";
+            status.style.top = "50%";
+
+            boat.style.display = "block";
+            status.style.display = "block";
+
+            lastMarkerX = 50;
+            lastMarkerY = 50;
+
+            addTrajectoryPoint(50, 50);
+
+            return;
+        }
+
+
+        /*
+        * Hitung jarak dari titik awal.
+        */
+
+        const distance =
+            distanceMeters(
+                originLat,
+                originLon,
+                lat,
+                lon
+            );
+
+
+        console.log(
+            `GPS: ${lat}, ${lon} | ` +
+            `Jarak dari origin: ${distance.toFixed(2)} m`
+        );
+
+
+        /*
+        * Konversi perubahan GPS menjadi meter.
+        */
+
+        const metersNorth =
+            (lat - originLat) *
+            111320;
+
+        const metersEast =
+            (lon - originLon) *
+            111320 *
+            Math.cos(
+                originLat *
+                Math.PI / 180
+            );
+
+
+        /*
+        * Abaikan perubahan kecil GPS.
+        */
+
+        if (
+            Math.abs(metersNorth) <
+            GPS_JITTER_METERS &&
+            Math.abs(metersEast) <
+            GPS_JITTER_METERS
+        ) {
+
+            return;
+        }
+
+
+        /*
+        * Konversi meter menjadi posisi map.
+        *
+        * Utara  -> ke atas
+        * Selatan -> ke bawah
+        * Timur -> ke kanan
+        * Barat -> ke kiri
+        */
+
+        let x =
+            50 +
+            (metersEast /
+            MAP_METERS) * 50;
+
+        let y =
+            50 -
+            (metersNorth /
+            MAP_METERS) * 50;
+
+
+        /*
+        * Jangan biarkan marker keluar map.
+        */
+
+        x = Math.max(
+            5,
+            Math.min(95, x)
+        );
+
+        y = Math.max(
+            5,
+            Math.min(95, y)
+        );
+
+        lastMarkerX = x;
+        lastMarkerY = y;
+
+        /*
+        * Tambahkan posisi kapal
+        * ke garis trajectory.
+        */
+        addTrajectoryPoint(x, y);
+
+        boat.style.left = `${x}%`;
+        boat.style.top = `${y}%`;
+
+        status.style.left = `${x}%`;
+        status.style.top = `${y}%`;
+
+        boat.style.display = "block";
+        status.style.display = "block";
+    }
+    
+    function updateTelemetry(data) {
+
+        const yaw = Number(data.yaw ?? 0);
+        const sysCal = Number(data.sys_cal ?? 0);
+        const lat = Number(data.lat ?? -999);
+        const lon = Number(data.lon ?? -999);
+        const satellites = Number(data.satellites ?? 0);
+
+        let age = null;
+
+        if (data.age !== null && data.age !== undefined) {
+            age = Number(data.age);
+        }
+
+
+        /* =========================
+           YAW
+           ========================= */
+
+        document.getElementById("yawValue").textContent =
+            `${yaw.toFixed(1)}°`;
+
+        document.getElementById("detailYaw").textContent =
+            `${yaw.toFixed(1)}°`;
+
+
+        /* =========================
+           CALIBRATION
+           ========================= */
+
+        document.getElementById("calibrationValue").textContent =
+            `${sysCal} / 3`;
+
+
+        /* =========================
+           SATELLITES
+           ========================= */
+
+        document.getElementById("satellitesValue").textContent =
+            satellites;
+
+
+        /* =========================
+           GPS
+           ========================= */
+
+        const gpsValid =
+            lat !== -999 &&
+            lon !== -999;
+
+        const gpsValue =
+            document.getElementById("gpsValue");
+
+        const coordinatesValue =
+            document.getElementById("coordinatesValue");
+
+        const mapStatus =
+            document.getElementById("mapStatus");
+
+        const gpsLog =
+            document.getElementById("gpsLog");
+
+
+        if (gpsValid) {
+
+            gpsValue.textContent =
+                `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+                
+            updateBoatPosition(lat, lon);
+
+            coordinatesValue.textContent =
+                `S ${lat.toFixed(6)} | E ${lon.toFixed(6)}`;
+
+            mapStatus.textContent =
+                "GPS aktif";
+
+            gpsLog.textContent =
+                `✔ GPS aktif — ${satellites} satelit`;
+
+            gpsValue.classList.remove("gps-invalid");
+
+        } else {
+        
+            updateBoatPosition(-999, -999);
+
+            gpsValue.textContent =
+                "Mencari...";
+
+            coordinatesValue.textContent =
+                "GPS belum tersedia";
+
+            mapStatus.textContent =
+                "Menunggu GPS";
+
+            gpsLog.textContent =
+                "⏳ GPS sedang mencari satelit...";
+
+            gpsValue.classList.add("gps-invalid");
+        }
+
+
+        /* =========================
+           AGE
+           ========================= */
+
+        const ageValue =
+            document.getElementById("ageValue");
+
+        if (age === null || !Number.isFinite(age)) {
+
+            ageValue.textContent = "--";
+
+        } else {
+
+            ageValue.textContent =
+                `${age.toFixed(1)} s ago`;
+        }
+
+
+        /* =========================
+           ARDUINO STATUS
+           ========================= */
+
+        const arduinoLog =
+            document.getElementById("arduinoLog");
+
+        if (age !== null && age < 3.0) {
+
+            arduinoLog.textContent =
+                "✔ Telemetry Arduino diterima";
+
+        } else {
+
+            arduinoLog.textContent =
+                "⚠ Telemetry Arduino terlambat / terputus";
+        }
+
+
+        /* =========================
+           GLOBAL STATUS
+           ========================= */
+
+        setTelemetryStatus(age);
+
+    }
+
+
+    async function fetchTelemetry() {
+
+        try {
+
+            const response =
+                await fetch(TELEMETRY_API, {
+                    cache: "no-store"
+                });
+
+            if (!response.ok) {
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+            }
+
+            const data =
+                await response.json();
+
+            updateTelemetry(data);
+
+        } catch (error) {
+
+            console.error(
+                "Telemetry error:",
+                error
+            );
+
+            setTelemetryStatus(null);
+
+            document.getElementById(
+                "arduinoLog"
+            ).textContent =
+                "❌ Gagal membaca telemetry VPS";
+
+        }
+
+    }
+
+
+    /*
+     * Ambil telemetry setiap 500 ms.
+     * API mengambil data terakhir yang diterima VPS
+     * dari Jetson.
+     */
+
+    fetchTelemetry();
+
+    setInterval(
+        fetchTelemetry,
+        500
+    );
+
+</script>
+
+</body>
+</html>
