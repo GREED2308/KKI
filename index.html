@@ -198,11 +198,7 @@
             border-radius: 6px;
             border: 2px solid var(--border-color);
             display: block;
-
-            /* Feed kamera hanya untuk ditampilkan */
-            pointer-events: none;
-            user-select: none;
-        }
+        } 
 
         /* =========================================================
            TELEMETRY PANEL
@@ -373,7 +369,7 @@
         </div>
 
         <h1 class="header-title">
-            Lintasan : B
+            Lintasan : A
         </h1>
 
         <div class="header-text" style="color: var(--text-muted);">
@@ -535,54 +531,6 @@
                     allow="autoplay; fullscreen"
                     title="Underwater Camera">
                 </iframe>
-
-            </div>
-
-            <div class="card">
-
-                <div class="section-title">
-                    Captured Images
-                </div>
-
-                <div style="
-                    display:flex;
-                    gap:12px;
-                    flex-wrap:wrap;
-                ">
-
-                    <a
-                        href="/captures/front"
-                        target="_blank"
-                        style="
-                            display:inline-block;
-                            padding:12px 18px;
-                            background:var(--panel-bg-2);
-                            border:1px solid var(--border-color);
-                            border-radius:6px;
-                            color:var(--cyan-accent);
-                            text-decoration:none;
-                            font-weight:bold;
-                        ">
-                        Front Camera Capture
-                    </a>
-
-                    <a
-                        href="/captures/underwater"
-                        target="_blank"
-                        style="
-                            display:inline-block;
-                            padding:12px 18px;
-                            background:var(--panel-bg-2);
-                            border:1px solid var(--border-color);
-                            border-radius:6px;
-                            color:var(--cyan-accent);
-                            text-decoration:none;
-                            font-weight:bold;
-                        ">
-                        Underwater Camera Capture
-                    </a>
-
-                </div>
 
             </div>
 
